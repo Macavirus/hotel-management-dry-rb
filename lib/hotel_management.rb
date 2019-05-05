@@ -31,7 +31,12 @@ module HotelManagement
     end
 
     def check_out_guest(name:)
-      @rooms.reject! { |r| r.name == name }
+      guest_room = @rooms.find { |r| r.name == name }
+      if guest_room
+        @rooms.delete(guest_room)
+      else
+        Failure(:no_such_guest)
+      end
     end
 
     def room_available?(room_number)
