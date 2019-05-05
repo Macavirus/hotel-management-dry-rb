@@ -4,7 +4,7 @@ require "pry"
 
 module HotelManagement
   class Room
-    attr_reader :number
+    attr_reader :number, :name
 
     def initialize(name:, number:)
       @name = name
@@ -28,6 +28,10 @@ module HotelManagement
       else
         Failure(:room_not_available)
       end
+    end
+
+    def check_out_guest(name:)
+      @rooms.reject! { |r| r.name == name }
     end
 
     def room_available?(room_number)

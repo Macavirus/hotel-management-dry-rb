@@ -19,6 +19,15 @@ module HotelManagement
       end
     end
 
+    describe "checking out a guest" do
+      it "can check out a guest" do
+        subject.check_in_guest(name: "Darby",
+                               room: 20)
+        subject.check_out_guest(name: "Darby")
+        expect(subject.room_available?(20)).to be(true)
+      end
+    end
+
     describe "#room_available?" do
       it "returns false if room is taken" do
         subject.check_in_guest(name: "Name",
