@@ -31,15 +31,28 @@ module HotelManagement
     end
 
     describe "checking out a guest" do
-      it "can check out a guest" do
-        hotel.check_in_guest(name: "Darby",
-                             rooms: 20)
-        hotel.check_out_guest(name: "Darby")
-        expect(hotel.room_available?(20)).to be(true)
+      context "when the guest is in one room" do
+        it "can check out a guest" do
+          hotel.check_in_guest(name: "Darby",
+                               rooms: 20)
+          hotel.check_out_guest(name: "Darby")
+          expect(hotel.room_available?(20)).to be(true)
+        end
+
+        it "fails to check out a guest if they aren't checked in" do
+          expect(hotel.check_out_guest(name: "Darby")).to be_a(Dry::Monads::Result::Failure)
+        end
       end
 
-      it "fails to check out a guest if they aren't checked in" do
-        expect(hotel.check_out_guest(name: "Darby")).to be_a(Dry::Monads::Result::Failure)
+      context "when the guest is in multiple rooms" do
+        it "can check out of multiple rooms" do
+          hotel.check_in_guest(name: "Darby",
+                               rooms: [20, 21])
+          hotel.check_out_guest(name: "Darby")
+
+          expect(hotel.room_available?(20)).to be(true)
+          expect(hotel.room_available?(21)).to be(true)
+        end
       end
     end
 

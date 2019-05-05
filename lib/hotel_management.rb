@@ -42,9 +42,9 @@ module HotelManagement
     end
 
     def check_out_guest(name:)
-      guest_room = @rooms.find { |r| r.name == name }
-      if guest_room
-        @rooms.delete(guest_room)
+      guest_rooms = @rooms.select { |r| r.name == name }
+      if guest_rooms.any?
+        guest_rooms.each { |room| @rooms.delete(room) }
       else
         Failure(:no_such_guest)
       end
