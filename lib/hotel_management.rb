@@ -19,14 +19,25 @@ module HotelManagement
       @rooms = Set.new
     end
 
-    def check_in_guest(name:, room:)
-      if room_available?(room)
-        new_room = Room.new(name: name,
-                            number: room)
-        @rooms << new_room
-        Success(new_room)
-      else
-        Failure(:room_not_available)
+    # Check in a guest
+    #
+    # @param name [String] The name of the guest checking in
+    # @param rooms [Integer, Array<Integer>] The room number to check in
+    # @return [Array<Dry::Monads::Result>] an array of Success || Failure objects
+    def check_in_guest(name:, rooms:)
+      # Coerce an Integer to an Array
+      rooms = [*rooms]
+
+      rooms.map do |room|
+        if room_available?(room)
+          new_room = Room.new(name: name,
+                              number: room)
+          @rooms << new_room
+
+          Success(new_room)
+        else
+          Failure(:room_not_available)
+        end
       end
     end
 
