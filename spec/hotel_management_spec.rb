@@ -9,8 +9,8 @@ module HotelManagement
         expect(hotel.check_in_guest(name: "Darby",
                                     rooms: [20, 21])).to all(be_a(Dry::Monads::Result::Success))
 
-        expect(hotel.room_available?(20)).to be(false)
-        expect(hotel.room_available?(21)).to be(false)
+        expect(hotel.room_available?(20) &&
+               hotel.room_available?(21)).to be(false)
       end
 
       context "when the room is free" do
@@ -50,8 +50,8 @@ module HotelManagement
                                rooms: [20, 21])
           hotel.check_out_guest(name: "Darby")
 
-          expect(hotel.room_available?(20)).to be(true)
-          expect(hotel.room_available?(21)).to be(true)
+          expect(hotel.room_available?(20) &&
+                 hotel.room_available?(21)).to be(true)
         end
       end
     end
