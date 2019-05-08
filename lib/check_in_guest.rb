@@ -12,8 +12,6 @@ module HotelManagement
     include Dry::Monads::Result::Mixin
     include Dry::Monads::Do.for(:call)
 
-    attr_reader :room_manager
-
     def initialize(room_manager:)
       @room_manager = room_manager
     end

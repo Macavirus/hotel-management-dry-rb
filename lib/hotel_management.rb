@@ -7,6 +7,8 @@ require "set"
 require "pry"
 require_relative "room_manager.rb"
 require_relative "check_in_guest.rb"
+require_relative "check_out_guest.rb"
+require_relative "room.rb"
 
 module HotelManagement
   class Hotel
@@ -25,6 +27,10 @@ module HotelManagement
       CheckInGuest.new(room_manager: @room_manager).call(name: name, rooms: rooms)
     end
 
+    # Check in a guest
+    #
+    # @param name [String] The name of the guest checking out
+    # @return [Dry::Monads::Result] The Success or Failure object wrapping a rooms list or failure code
     def check_out_guest(name:)
       guest_rooms = @rooms.select { |r| r.name == name }
       if guest_rooms.any?
