@@ -4,3 +4,4 @@ source "https://rubygems.org"
 gemspec
 
 gem "dry-monads", "~> 1.2"
+gem "dry-types", "~> 1.0"
