@@ -28,7 +28,8 @@ module HotelManagement
       # Coerce an Integer to an Array
       rooms = [*rooms]
 
-      rooms.map do |room|
+      # Logic Error, it could check in a few rooms, and fail the last one. If not all are available, we shouldn't check in a few
+      check_ins = rooms.map do |room|
         if room_available?(room)
           new_room = Room.new(name: name,
                               number: room)
@@ -39,6 +40,8 @@ module HotelManagement
           Failure(:room_not_available)
         end
       end
+
+      check_ins.all?(Success) ? [Success()] : [Failure(:room_not_available)]
     end
 
     def check_out_guest(name:)
