@@ -9,15 +9,6 @@ require_relative "room_manager.rb"
 require_relative "check_in_guest.rb"
 
 module HotelManagement
-  class Room
-    attr_reader :number, :name
-
-    def initialize(name:, number:)
-      @name = name
-      @number = number
-    end
-  end
-
   class Hotel
     include Dry::Monads::Result::Mixin
 
