@@ -4,44 +4,6 @@ module HotelManagement
   RSpec.describe Hotel do
     subject(:hotel) { described_class.new }
 
-    describe "checking in a guest" do
-
-      context "when checking in to multiple rooms" do
-
-      it "can check one guest into multiple rooms" do
-        expect(hotel.check_in_guest(name: "Darby",
-                                    rooms: [20, 21])).to all(be_a(Dry::Monads::Result::Success))
-
-        expect(hotel.room_available?(20) &&
-               hotel.room_available?(21)).to be(false)
-      end
-
-      it "will fail if not all rooms are free" do
-        hotel.check_in_guest(name: "Ashley", rooms: 20)
-        expect(hotel.check_in_guest(name: "Darby", rooms: [19,20])).to all(
-          be_a(Dry::Monads::Result::Failure))
-
-      end
-      end
-
-
-      context "when the room is free" do
-        it "returns Success" do
-          expect(hotel.check_in_guest(name: "Darby",
-                                      rooms: 20)).to all(be_a(Dry::Monads::Result::Success))
-        end
-      end
-
-      context "when the room is taken" do
-        it "returns Failure" do
-          hotel.check_in_guest(name: "Darby",
-                               rooms: 20)
-          expect(hotel.check_in_guest(name: "Paulie",
-                                      rooms: 20)).to all(be_a(Dry::Monads::Result::Failure))
-        end
-      end
-    end
-
     describe "checking out a guest" do
       context "when the guest is in one room" do
         it "can check out a guest" do
