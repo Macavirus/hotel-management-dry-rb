@@ -13,6 +13,10 @@ module HotelManagement
         it "can check 1 guest into many rooms" do
           expect(check_in_guest.call(name: "Darby", rooms: [19, 20]).success?).to be(true)
         end
+
+        it "cannot check in if rooms are not unique" do
+          expect(check_in_guest.call(name: "Darby", rooms: [19, 19]).success?).to be(false)
+        end
       end
 
       context "when the rooms are full" do

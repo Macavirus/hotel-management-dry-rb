@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# A service object to check in a guest. The entire data flow is listed in the public #call method.
+
 require "dry/monads/result"
 require "dry/monads/do"
 
@@ -18,29 +20,34 @@ module HotelManagement
 
     def call(data)
       validated_data = yield validate(data)
-      coerced_data = yield coerce(validated_data)
-      check_in(coerced_data)
+      duplicates_removed = yield remove_duplicates(validated_data)
+      check_in(duplicates_removed)
     end
 
     private
 
-    def validate(data)
-      check_in_hash = Types::Hash.schema(
-        name: Types::String,
-        rooms: Types::Coercible::Integer | Types::Array.of(Types::Coercible::Integer),
-      )
+    CHECK_IN_HASH = Types::Hash.schema(
+      name: Types::Coercible::String,
+      rooms: Types::Coercible::Integer | Types::Array.of(Types::Coercible::Integer),
+    )
 
-      valid_data = check_in_hash[data]
-      Success(valid_data)
+    def validate(data)
+      valid_types = CHECK_IN_HASH[data]
+
+      # If rooms was an integer, splat it into an array so we can iterate with it.
+      coerced = valid_types.merge(rooms: Array(valid_types[:rooms]))
+
+      Success(coerced)
     rescue StandardError # This is a kludge instead of specifying the myriad error types from Dry::Types
       Failure(:bad_data)
     end
 
-    # If rooms was an integer, splat it into an array so we can iterate with it.
-    def coerce(data)
-      rooms_as_array = [*data[:rooms]]
-      coerced_data = data.merge(rooms: rooms_as_array)
-      Success(coerced_data)
+    def remove_duplicates(data)
+      if data[:rooms].group_by(&:itself).select { |_k, v| v.size > 1 }.keys.empty?
+        Success(data)
+      else
+        Failure(:duplicate_rooms)
+      end
     end
 
     def check_in(data)

@@ -29,7 +29,7 @@ module HotelManagement
       guest_hash[data]
       Success(data)
     rescue StandardError
-      Failure(:no_such_guest)
+      Failure(:not_a_valid_name)
     end
   end
 end
