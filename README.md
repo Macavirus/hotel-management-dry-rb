@@ -1,38 +1,30 @@
-# HotelManagement
+# Hotel Management
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/hotel_management`. To experiment with that code, run `bin/console` for an interactive prompt.
+This little gem is a simple application to manage a hotel by checking in/checking out guests.
 
-TODO: Delete this and the text above, and describe your gem
+## Purpose
 
-## Installation
+This application is mainly used as an experiment to test out the [dry-monads](https://dry-rb.org/gems/dry-monads/) and [dry-validation](https://dry-rb.org/gems/dry-validation/) libraries from [https://dry-rb.org/](https://dry-rb.org/). They allow for easier control flow through a variety of clean, functional steps that can each produce an error. Inspired by [railway-oriented-programming](https://fsharpforfunandprofit.com/rop/) from the F# community.
 
-Add this line to your application's Gemfile:
+## Example usage:
 
 ```ruby
-gem 'hotel_management'
+hotel = Hotel.new
+room_manager = RoomManager.new
+
+# create a guest and try to check them in
+guest = { name: "Jan Hrach", rooms: [18, 19, 20]}
+
+# check in a guest
+# check_in_result is either a Success or Failure monad
+check_in_result = CheckInGuest.new(room_manager: room_manager).call(guest)
+
+# check out the guest
+# result is either a Success or Failure monad
+check_out_result = CheckOutGuest.new(room_manager: room_manager).call(guest)
 ```
 
-And then execute:
 
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install hotel_management
-
-## Usage
-
-TODO: Write usage instructions here
-
-## Development
-
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
-
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
-
-## Contributing
-
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/hotel_management.
 
 ## License
 
